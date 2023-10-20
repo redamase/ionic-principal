@@ -9,4 +9,23 @@ if (environment.production) {
 }
 
 platformBrowserDynamic().bootstrapModule(AppModule)
-  .catch(err => console.log(err));
+navigator.serviceWorker.register('/ngsw-worker.js')
+  .then(registration => {
+    console.log('Service Worker registrado', registration);
+    
+    registration.onupdatefound = () => {
+      const installingWorker = registration.installing;
+      if (installingWorker) {
+        installingWorker.onstatechange = () => {
+          if (installingWorker.state === 'installed') {
+            if (navigator.serviceWorker.controller) {
+              console.log('Nuevo contenido disponible; por favor actualice.');
+            } else {
+              console.log('Contenido almacenado en caché para uso sin conexión.');
+            }
+          }
+        };
+      }
+    };
+  })
+  .catch(error => console.error('Error al registrar el Service Worker', error));
