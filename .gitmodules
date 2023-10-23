@@ -1,0 +1,3 @@
+[submodule "src/app/administrador"]
+	path = src/app/administrador
+	url = https://github.com/redamase/ionic-modulo-admin.git
